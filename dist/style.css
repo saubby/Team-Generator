@@ -1,0 +1,40 @@
+#page_header {
+    text-align: center;
+    background-color: #490b2d;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: white
+}
+
+
+.text {
+    padding: 20px;
+    border-radius: 6px;
+    background-color: rgb(235, 224, 224);
+    color: rgb(192, 79, 79);
+    margin: 20px;
+}
+
+.card {
+    padding: 20px;
+    border-radius: 2px;
+    background-color: white;
+    color: powderblue;
+    margin: 20px;
+}
+
+
+
+.col {
+    flex: 5;
+    text-align: center;
+}
+
+
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
