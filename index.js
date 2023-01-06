@@ -5,17 +5,18 @@ const Intern = require("./Library/Int");
 const Manager = require("./Library/Man");
 
 const employees = [];
-
-function initApp() {
+function startApp() {
     initiatehtml();
     addupmember();
 }
 
 function addupmember() {
     inquirer.prompt([{
+
         message: "Name of new member",
         name: "Name"
     },
+
     {
         type: "list",
         message: "Role of new team member",
@@ -30,10 +31,13 @@ function addupmember() {
         message: "Id of new team member",
         name: "Id"
     },
+
     {
         message: "Email address of new team member",
         name: "Email"
-    }])
+    }
+
+    ])
         .then(function ({ Name, Role, Id, Email }) {
 
             let roledesc = "";
@@ -58,44 +62,38 @@ function addupmember() {
                 type: "list",
                 message: "Would you like to add more team members?",
                 choices: [
-                    "yes",
-                    "no"
+                    "yes", "No"
                 ],
                 name: "moremembers"
-            }])
-                .then(function ({ roledesc, moremembers }) {
-                    let newMember;
+            }
+            ]).then(function ({ roledesc, moremembers }) {
+                let newMember;
 
-                    if (Role === "Engineer") {
-                        newMember = new Engineer(Name, Id, Email, roledesc);
+                if (Role === "Engineer") {
+                    newMember = new Engineer(Name, Id, Email, roledesc);
+                }
+
+
+                else if (Role === "Intern") {
+                    newMember = new Intern(Name, Id, Email, roledesc);
+                }
+
+                else {
+                    newMember = new Manager(Name, Id, Email, roledesc);
+                }
+                employees.push(newMember);
+                addHtml(newMember).then(function () {
+
+                    if (moremembers === "yes") {
+                        addupmember();
                     }
-
-
-                    else if (Role === "Intern") {
-                        newMember = new Intern(Name, Id, Email, roledesc);
-                    }
-
                     else {
-                        newMember = new Manager(Name, Id, Email, roledesc);
+                        finishHtml();
                     }
-                    employees.push(newMember);
-                    addHtml(newMember)
-                        .then(function () {
-
-                            if (moremembers === "yes") {
-                                addupmember();
-                            }
-
-                            else {
-                                finishHtml();
-                            }
-                        });
-
                 });
+            });
         });
 }
-
-
 
 function initiatehtml() {
     const html = `<!DOCTYPE html>
@@ -104,7 +102,8 @@ function initiatehtml() {
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>Team Description</title>
     </head>
     <body>
@@ -128,6 +127,7 @@ function addHtml(member) {
         const Id = member.getId();
         const Email = member.getEmail();
         let data = "";
+
 
         if (Role === "Engineer") {
             const GitHub = member.getGithub();
@@ -170,7 +170,6 @@ function addHtml(member) {
             </div>
         </div>`
         }
-
         console.log("adding team member");
         fs.appendFile("./dist/index.html", data, function (err) {
             if (err) {
@@ -179,20 +178,13 @@ function addHtml(member) {
             return resolve();
         });
     });
-
-
-
-
-
-
 }
 
 function finishHtml() {
     const html = ` </div>
     </div>
-    
-</body>
-</html>`;
+    </body>
+    </html>`;
 
     fs.appendFile("./dist/index.html", html, function (err) {
         if (err) {
@@ -201,5 +193,4 @@ function finishHtml() {
     });
     console.log("finish");
 }
-
-initApp();
+startApp();
